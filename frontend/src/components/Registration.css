@@ -1,0 +1,58 @@
+.reg-container {
+    background-image: url('/photo.login.jpg');
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    background-position: center;
+    height: 100vh; /* 100% מגובה המסך */
+    margin: 0;
+    font-family: sans-serif;
+    font-size: 16px;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+}
+
+
+.registration-popup {
+    width: 40%; 
+    margin: 10px auto;
+    padding: 20px;
+    background-color: rgba(255, 255, 255, 0.626);
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    align-items: center;
+}
+
+.btn_reg {
+    padding: 10px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    margin-top: 10px;
+    font-size: 16px;
+}
+.btn_reg:hover {
+    background-color: #07628d;
+}
+
+
+
+
+@media (max-width: 600px) {
+    body {
+        background-size: 100% 100%;
+    }
+
+    .registration-popup {
+        width: 90%;
+        margin: 10px auto;
+    }
+}

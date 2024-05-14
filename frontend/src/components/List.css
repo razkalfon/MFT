@@ -1,0 +1,173 @@
+/* List.css */
+.buy_h2,.sell_h2{
+    color: whitesmoke;
+  }
+  .calculators-container {
+      display: flex;
+      justify-content: space-around;
+    }
+    .calss_buy,.calss_sell {
+      width: 30%; /* רוחב של 40% */
+      height: 60vh; /* 70% מגובה המסך */
+      margin: auto; /* כדי למרכז */
+      padding: 20px;
+      background-color: rgba(62, 89, 125, 0.486);
+      border: 1px solid rgba(29, 57, 85, 0.574);
+      border-radius: 5px;
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      align-items: center;
+      position: absolute; /* כדי להוסיף מיקום יחסי */
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+  }
+  .class_my_stocks{
+    width: 50%; /* רוחב של 40% */
+      height: 60vh; /* 70% מגובה המסך */
+      margin: auto; /* כדי למרכז */
+      padding: 20px;
+      background-color: rgba(255, 255, 255, 0.636);
+      border: 1px solid rgba(255, 255, 255, 0.574);
+      border-radius: 5px;
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      align-items: center;
+      position: absolute; /* כדי להוסיף מיקום יחסי */
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+  }
+    
+    
+    .btn_sell {
+      background-color: red;
+      color: white;
+      padding: 10px;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+      margin-top: 10px;
+      font-size: 16px;
+      margin-left: 70px;
+    }
+    
+    .btn_sell:hover {
+      background-color: darkred;
+    }
+    .hidden {
+      display: none;
+    }
+    .btn_buy{
+      padding: 10px;
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+      margin-top: 10px;
+      font-size: 16px;
+      margin-left: 70px;
+    }
+    .btn_buy:hover {
+      background-color: rgb(0, 139, 88);
+    }
+    .btn_sell1 {
+      background-color: red;
+      color: white;
+      padding: 10px;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+      margin-top: 10px;
+      font-size: 16px;
+    }
+    
+    .btn_sell1:hover {
+      background-color: darkred;
+    }
+    .btn_my_list {
+      background-color: rgb(60, 105, 125);
+      color: white;
+      padding: 10px;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+      margin-top: 10px;
+      font-size: 16px;
+    }
+    .btn_diary:hover {
+      background-color: rgb(117, 78, 29);
+    }
+    .btn_diary {
+      background-color: rgb(180, 133, 73);
+      color: white;
+      padding: 10px;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+      margin-top: 10px;
+      font-size: 16px;
+    }
+    .btn_my_list:hover {
+      background-color: rgb(6, 66, 108);
+      }
+    .btn_buy1{
+      padding: 10px;
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+      margin-top: 10px;
+      font-size: 16px;
+    }
+    .btn_buy1:hover {
+      background-color: rgb(0, 139, 88);
+    }
+    .buttons {
+      display: flex;
+      justify-content: flex-start; /* כפתורים בצד העליון */
+      align-items: flex-start; /* כפתורים בצד העליון */
+      align-self: flex-start;
+    }
+    .buy_inputs,.sell_inputs {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+    }
+    
+    .buy_inputs input,.sell_inputs input {
+      width: 100%;
+      margin-bottom: 10px;
+      direction: rtl;
+      text-align: left;
+    }
+    .buy_inputs input::placeholder, .sell_inputs input::placeholder{
+      text-align: right;
+    }
+    .table-symboll{
+      padding-left: 80px;
+    }
+    .table-pl{
+      padding-right: 80px;
+    }
+    
+    
+  
+    
+    
+    
+    
