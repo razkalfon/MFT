@@ -3,10 +3,13 @@ import { DateTime } from 'luxon';
 
 const today = DateTime.now();
 console.log("תאריך", today);
+
 const symbol = "AAPL";
 const rateBuy = 192.777;
 const rateSell = 200;
 const quantity = 15;
+
+
 
 function calculateProfitLossSold(rateBuy, rateSell, quantity) {
     const profitLossSold = (rateSell - rateBuy) * quantity;
@@ -41,4 +44,4 @@ async function main() {
 }
 
 main();
-export  {calculateProfitLossSold,fetchAppleStockPrice,plcuurentsymbol};
+export { calculateProfitLossSold, fetchAppleStockPrice, plcuurentsymbol };

@@ -1,4 +1,15 @@
 import mongoose from 'mongoose';
+const dailyProfitLossSchema = new mongoose.Schema({
+    date: {
+        type: Date,
+        required: true,
+        unique: true,
+    },
+    totalProfitLoss: {
+        type: Number,
+        required: true,
+    }
+});
 const  stockSchema = new mongoose.Schema({
     symbol:{
     type: String,

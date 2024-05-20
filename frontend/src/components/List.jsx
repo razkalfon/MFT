@@ -1,14 +1,54 @@
-import React, { useRef, useState } from "react";
+import React, { useRef, useState, useEffect } from "react";
 import "./List.css";
 
-const handleBuyStock = async (tempEmail, datebuy, openPrice, symbol, quantity, setMyList, mylist) => {
+const handleSellStock = async (tempEmail, datesell, closeprice, removeSymbol, removeQuantity, setMyList2, setMyList) => {
+  const newStock = {
+    datesell,
+    closeprice,
+    symbol: removeSymbol,
+    quantity: removeQuantity
+  };
+  try {
+    const response = await fetch(`/api/stock/sell_stock/${tempEmail}`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(newStock)
+    });
+
+    if (!response.ok) {
+      throw new Error('הסרת המניה נכשלה');
+    }
+
+    const responseData = await response.json();
+    setMyList2(prev => [...prev, responseData]);
+    setMyList(prev => {
+      const updatedList = prev.map(stock => {
+        if (stock.symbol === removeSymbol) {
+          stock.quantity -= removeQuantity;
+          if (stock.quantity === 0) {
+            return null;
+          } else {
+            stock.pldaily = ((parseFloat(closeprice) - parseFloat(stock.openPrice)) * stock.quantity).toFixed(2);
+          }
+        }
+        return stock;
+      }).filter(stock => stock !== null);
+      return updatedList;
+    });
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+const handleBuyStock = async (tempEmail, datebuy, openPrice, symbol, quantity, setMyList, setMyList2) => {
   const newStock = {
     datebuy,
     openPrice,
     symbol,
     quantity
   };
-
   try {
     const response = await fetch(`/api/stock/buy_stock/${tempEmail}`, {
       method: 'POST',
@@ -19,14 +59,14 @@ const handleBuyStock = async (tempEmail, datebuy, openPrice, symbol, quantity, s
     });
 
     if (!response.ok) {
-      throw new Error('הוספת המנייה נכשלה');
+      throw new Error('הוספת המניה נכשלה');
     }
 
     const responseData = await response.json();
-    setMyList([...mylist, responseData]);
+    setMyList(responseData);
+    setMyList2(prev => [...prev, responseData]);
   } catch (error) {
     console.error(error);
-    // טיפול בשגיאה כאן
   }
 };
 
@@ -41,7 +81,61 @@ function List() {
   const id_sell_date = useRef(null);
   const [displaySection, setDisplaySection] = useState(null);
   const [mylist, setMyList] = useState([]);
+  const [mylist2, setMyList2] = useState([]);
+
   const tempEmail = window.tempemail;
+
+  const getListStock = async () => {
+    try {
+      const res = await fetch(`/api/stock/get_listStocks/${tempEmail}`, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      });
+
+      if (!res.ok) {
+        throw new Error('בעיה בהצגת הרשימה');
+      }
+
+      const responseData = await res.json();
+      setMyList(responseData);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  useEffect(() => {
+    if (tempEmail && displaySection === "stocks") {
+      getListStock();
+    }
+  }, [displaySection, tempEmail]);
+
+  const getStocksHistory = async () => {
+    try {
+      const res = await fetch(`/api/stock/get_stocksHistory/${tempEmail}`, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      });
+
+      if (!res.ok) {
+        throw new Error('בעיה בהצגת הרשימה');
+      }
+
+      const responseData = await res.json();
+      setMyList2(responseData);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  useEffect(() => {
+    if (tempEmail && displaySection === "diary") {
+      getStocksHistory();
+    }
+  }, [displaySection, tempEmail]);
 
   const addNewStock = async () => {
     const datebuy = id_buy_date.current.value;
@@ -49,46 +143,31 @@ function List() {
     const symbol = id_symboll_buy.current.value;
     const quantity = id_quantity_buy.current.value;
     if (tempEmail) {
-      await handleBuyStock(tempEmail, datebuy, openPrice, symbol, quantity, setMyList, mylist);
+      await handleBuyStock(tempEmail, datebuy, openPrice, symbol, quantity, setMyList, setMyList2);
     } else {
       console.error("אין כתובת מייל זמינה");
-      // טיפול במקרה בו אין כתובת מייל זמינה
     }
   };
-  const removeStock = () => {
+
+  const removeStock = async () => {
     const removeSymbol = id_symboll_sell.current.value;
-    const removeQuantity = id_quantity_sell.current.value;
-
-    const updatedList = mylist.filter((item) => {
-      if (item.symbol === removeSymbol) {
-        if (item.quantity === removeQuantity) {
-          // אם כמות המניות שווה לכמות שרוצים להסיר - אל תכלול את הפריט במערך החדש
-          return false;
-        } else {
-          // אם כמות המניות שונה - עדכן כמות המניות והכלול את הפריט במערך החדש
-          item.quantity -= removeQuantity;
-          return true;
-        }
-      } else {
-        // אם ה-symbol של הפריט אינו תואם את ה-symbol שרוצים להסיר - כלול את הפריט במערך החדש
-        return true;
-      }
-    });
-
-    setMyList(updatedList);
-  };
-
-  const toggleDisplay = (section) => {
-    setDisplaySection(section);
+    const removeQuantity = parseInt(id_quantity_sell.current.value, 10);
+    const datesell = id_sell_date.current.value;
+    const closeprice = id_close_price.current.value;
+    if (tempEmail) {
+      await handleSellStock(tempEmail, datesell, closeprice, removeSymbol, removeQuantity, setMyList2, setMyList);
+    } else {
+      console.error("אין כתובת מייל זמינה");
+    }
   };
 
   return (
     <div className="calculators-container">
       <div className="buttons">
-        <button className="btn_buy1" onClick={() => toggleDisplay("buy")}>קניית מניה</button>
-        <button className="btn_my_list" onClick={() => toggleDisplay("stocks")}>רשימת המניות שלי</button>
-        <button className="btn_sell1" onClick={() => toggleDisplay("sell")}>מכירת מניה  </button>
-        <button className="btn_diary" onClick={() => toggleDisplay("diary")}>יומן העסקאות </button>
+        <button className="btn_buy1" onClick={() => setDisplaySection("buy")}>קניית מניה</button>
+        <button className="btn_my_list" onClick={() => setDisplaySection("stocks")}>רשימת המניות שלי</button>
+        <button className="btn_sell1" onClick={() => setDisplaySection("sell")}>מכירת מניה</button>
+        <button className="btn_diary" onClick={() => setDisplaySection("diary")}>יומן העסקאות</button>
       </div>
       <div className={`calss_buy ${displaySection === "buy" ? "" : "hidden"}`}>
         <div className="buy_h2">
@@ -120,7 +199,7 @@ function List() {
       </div>
       <div className={`class_my_stocks ${displaySection === "diary" ? "" : "hidden"}`}>
         <div className="my_stocks">
-          <h2>יומן העסקאות שלי</h2>
+          <h2>היסטוריית העסקאות שלי</h2>
         </div>
         {displaySection === "diary" && (
           <div>
@@ -133,7 +212,7 @@ function List() {
                 </tr>
               </thead>
               <tbody>
-                {mylist.map((item, index) => (
+                {mylist2.map((item, index) => (
                   <tr key={index}>
                     <td style={{ color: item.pldaily >= 0 ? 'green' : 'red' }} className="table-pl">{item.pldaily}</td>
                     <td>{item.quantity}</td>
